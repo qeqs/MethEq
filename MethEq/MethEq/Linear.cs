@@ -45,13 +45,15 @@ namespace MethEq
         /// <returns></returns>
         public static double[] GetMatrix(string s)
         {
-            double[] b = new double[s.Length];
+            double[] b = null;// new double[s.Length];
 
             try
             {
-                for (int i = 0; i < s.Length; i++)
+
+                string[] temp = s.Split(' ', '_');
+                b = new double[temp.Length];
+                for (int i = 0; i < b.Length; i++)
                 {
-                        string[] temp = s.Split(' ', '_');
                         b[i] = double.Parse(temp[i]);
                 }
             }
@@ -105,6 +107,7 @@ namespace MethEq
         /// <returns></returns>
         public static double[] Zeidel(double[,] a, double[] b, double[] x, int n, double eps)
         {
+            DateTime time =DateTime.Now;
             double[] x1 = new double[n];// — последующее приближение к точному решению системы
             double[] x0 = new double[n];//— предыдущее приближение к точному решению системы
             bool f;
@@ -116,7 +119,7 @@ namespace MethEq
                 for (int j = 0; j < n; j++)
                     if ((i < j) && (i != j))
                         x0[i] = x0[i] - a[i, j] * x[j];
-                    else if ((i > j) && (i <> j))
+                    else if ((i > j) && (i != j))
                         x0[i] = x0[i] - a[i, j] * x1[j];
 
                 x1[i] = 1 / a[i, i] * (b[i] + x0[i]);
@@ -127,6 +130,10 @@ namespace MethEq
                 f = (Math.Abs(x1[i] - x[i]) > eps);
             for (int k = 0; f; k++)//f == true
             {
+                if(DateTime.Now.TimeOfDay - time.TimeOfDay>new TimeSpan(0,0,5))
+                {
+                    return null;
+                }
                 for (int j = 0; j < n; j++)
                     x[j] = x1[j];
                 for (int i = 0; i < n; i++)
