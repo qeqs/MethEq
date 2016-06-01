@@ -74,7 +74,7 @@ namespace MethEq
                 return null;
             double[] x = new double[n],c = new double[n];
             // прямой ход метода Гаусса (т.е. приведение системы к треугольному виду)
-            for (int k = 1; k < n - 1; k++)
+            for (int k = 0; k < n - 1; k++)
                 for (int i = k + 1; i < n; i++)
                 {
                     c[i - 1] = a[i, k] / a[k, k];
@@ -93,6 +93,57 @@ namespace MethEq
                 x[i] = (b[i] - sum) / a[i, i];
             }
             return x;
+        }
+        /// <summary>
+        /// Метод Гауса-Зейделя.
+        /// </summary>
+        /// <param name="a">Матрица коэф.</param>
+        /// <param name="b">Вектор коэф.</param>
+        /// <param name="x">Произвольное начальное приближение к решению системы.</param>
+        /// <param name="n">Порядок системы.</param>
+        /// <param name="eps">Точность.</param>
+        /// <returns></returns>
+        public static double[] Zeidel(double[,] a, double[] b, double[] x, int n, double eps)
+        {
+            double[] x1 = new double[n];// — последующее приближение к точному решению системы
+            double[] x0 = new double[n];//— предыдущее приближение к точному решению системы
+            bool f;
+
+            // поиск первого и второго приближения к решению системы линейных уравнений
+            for (int i = 0; i < n; i++)
+            {
+                x0[i] = 0; x1[i] = 0;
+                for (int j = 0; j < n; j++)
+                    if ((i < j) && (i != j))
+                        x0[i] = x0[i] - a[i, j] * x[j];
+                    else if ((i > j) && (i <> j))
+                        x0[i] = x0[i] - a[i, j] * x1[j];
+
+                x1[i] = 1 / a[i, i] * (b[i] + x0[i]);
+            }
+            f = false;
+            for (int i = 0; i < n; i++)
+                // проверка условия выхода
+                f = (Math.Abs(x1[i] - x[i]) > eps);
+            for (int k = 0; f; k++)//f == true
+            {
+                for (int j = 0; j < n; j++)
+                    x[j] = x1[j];
+                for (int i = 0; i < n; i++)
+                {
+                    x0[i] = 0; x1[i] = 0;
+                    for (int j = 0; j < n; j++)
+                        if ((i < j) && (i != j)) x0[i] = x0[i] - a[i, j] * x[j];
+                        else if ((i > j) && (i != j)) x0[i] = x0[i] - a[i, j] * x1[j];
+                    x1[i] = 1 / a[i, i] * (b[i] + x0[i]);
+                }
+                f = false;
+                for (int z = 0; z < n; z++)
+                    f = (Math.Abs(x1[z] - x[z]) > eps);
+            }
+
+
+            return x1;
         }
     }
 }
