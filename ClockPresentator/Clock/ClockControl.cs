@@ -15,9 +15,12 @@ namespace Clock
         public ClockControl()
         {
             InitializeComponent();
-            clock = new Clock(picture.Location, picture.Size, picture);
-            timer.Interval = 500;
-            
+            clock = new Clock(new Point(0,0), Size,this);
+            timer.Interval = 100;
+            //clock.TimeChanged += new EventHandler(OnTimeChanged);
+
+            clock.Show();
+
         }
         public enum ClockType {[Description("Электронные")] Electronic=1, [Description("Циферблат")]ClockFace=2}
         ClockType type = ClockType.Electronic;
@@ -35,9 +38,9 @@ namespace Clock
             {
                 type = value;
                 if ((int)type == 1)
-                    clock = new Clock(picture.Location, picture.Size, picture);
+                    clock = new Clock(new Point(0, 0), Size, this);
                 if ((int)type == 2)
-                    clock = new ClockWithArrows(picture.Location, picture.Size, picture);
+                    clock = new ClockWithArrows(new Point(0, 0), Size, this);
                 clock.Offset = utc;
             }
         }
@@ -52,27 +55,28 @@ namespace Clock
 
 
         
-        private void picture_Resize(object sender, EventArgs e)
-        {
-        }
-
+        //private void OnTimeChanged(object sender,EventArgs e)
+        //{
+        //    TimeChanged(sender, e);
+        //}
         private void timer_Tick(object sender, EventArgs e)
         {
-            clock.Update();
+
             clock.Show();
-            TimeChanged(this, e);
+            clock.Update();
+            if(TimeChanged!=null)
+            TimeChanged(sender, e);
         }
-
-        private void ClockControl_Resize(object sender, EventArgs e)
+        //если запускать из ClockControl_Load то вижуалка крашится
+        public void Start()
         {
+            timer.Start();
 
-            picture.Size = Size;
         }
 
         private void ClockControl_Load(object sender, EventArgs e)
         {
-            clock.TimeChanged += TimeChanged;
-            timer.Start();
+            // timer.Start();
         }
     }
 }

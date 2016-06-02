@@ -14,15 +14,43 @@ namespace ClockPresentator
     {
         public FormMain()
         {
-            InitializeComponent();
+            InitializeComponent();           
+
         }
         DateTime lasttime = DateTime.Now;
-        private void clockControl_TimeChanged(object sender, EventArgs e)
+
+        private void FormMain_Load(object sender, EventArgs e)
         {
-            if((lasttime.TimeOfDay-clockControl.Time.TimeOfDay).Seconds>5)
+            clockControl1.Start();
+        }
+
+        private void clockControl1_TimeChanged(object sender, EventArgs e)
+        {
+            if(Math.Abs((lasttime.TimeOfDay-clockControl1.Time.TimeOfDay).Seconds)>=5)
             {
-                MessageBox.Show("Прошло 5 секунд");
+                lasttime = clockControl1.Time;
+                MessageBox.Show("ПРОШЛО 5 СЕКУНД!!!", "АХТУНГ!!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void buttonNotify_Click(object sender, EventArgs e)
+        {
+            clockControl1.TimeChanged -= clockControl1_TimeChanged;
+            buttonNotify.Enabled = !buttonNotify.Enabled;
+        }
+
+        private void buttonElectro_Click(object sender, EventArgs e)
+        {
+            clockControl1.TypeofClock = Clock.ClockControl.ClockType.Electronic;
+            buttonMeh.Enabled = !buttonMeh.Enabled;
+            buttonElectro.Enabled = !buttonElectro.Enabled;
+        }
+
+        private void buttonMeh_Click(object sender, EventArgs e)
+        {
+            clockControl1.TypeofClock = Clock.ClockControl.ClockType.ClockFace;
+            buttonMeh.Enabled = !buttonMeh.Enabled;
+            buttonElectro.Enabled = !buttonElectro.Enabled;
         }
     }
 }

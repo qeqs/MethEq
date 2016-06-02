@@ -17,7 +17,7 @@ namespace Clock
         
         
 
-        public ClockWithArrows(Point loc, Size size, PictureBox form):base(loc,size,form)
+        public ClockWithArrows(Point loc, Size size, Control form):base(loc,size,form)
         {
             center = new Point(DrawingSize.Width / 2, DrawingSize.Height / 2);
             R =( DrawingSize.Width / 2 < DrawingSize.Height / 2 ? DrawingSize.Width / 2 : DrawingSize.Height / 2)-50;
@@ -74,7 +74,7 @@ namespace Clock
         
         protected override  void OnResize(object sender, EventArgs e)
         {
-            PictureBox form = (PictureBox)sender;
+            Control form = (Control)sender;
             Size size = form.Size;
             bm = new Bitmap(size.Width, size.Height);
             _g = Graphics.FromImage(bm);

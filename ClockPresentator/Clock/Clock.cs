@@ -19,7 +19,7 @@ namespace Clock
         protected Point location;
         protected DateTime time;
         protected TimeSpan offset;
-        protected PictureBox parentControl;
+        protected Control parentControl;
         /// <summary>
         /// Выполняется после того как переменная времени изменилась
         /// </summary>
@@ -106,7 +106,7 @@ namespace Clock
             }
         }
 
-        public PictureBox ParentControl
+        public Control ParentControl
         {
             get
             {
@@ -128,7 +128,7 @@ namespace Clock
         }
         #endregion
 
-        public Clock(Point location,Size size,PictureBox form)
+        public Clock(Point location,Size size,Control form)
         {
 
             bm = new Bitmap(size.Width, size.Height);
@@ -166,7 +166,7 @@ namespace Clock
         /// </summary
         protected virtual void OnResize(object sender, EventArgs e)
         {
-            PictureBox form = (PictureBox)sender;
+            Control form = (Control)sender;
             Size size = form.Size;
             bm = new Bitmap(size.Width, size.Height);
             g = form.CreateGraphics();
